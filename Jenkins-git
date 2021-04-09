@@ -1,12 +1,23 @@
-pipeline{
+pipeline
+{
+environment{
+PATH = "/usr/local/src/maven/bin:$PATH"
+}
 agent any
 stages{
 stage("checkout scm")
 {
 steps{
-
 git(url:"https://github.com/minaxijoshi3101/myapp.git") 
-
+}
+}
+stage("maven build")
+{
+steps
+{
+sh '''
+mvn clean package
+'''
 }
 }
 }
