@@ -5,7 +5,7 @@ stage("checkout scm")
 {
 steps{
 step{
-git(url:""https://github.com/minaxijoshi3101/myapp.git") 
+git(url:"https://github.com/minaxijoshi3101/myapp.git") 
 }
 }
 }
