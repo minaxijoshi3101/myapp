@@ -4,21 +4,34 @@ environment{
 PATH = "/usr/local/src/maven/bin:$PATH"
 }
 agent any
-stages{
-stage("checkout scm")
+stages
 {
-steps{
-git(url:"https://github.com/minaxijoshi3101/myapp.git") 
+  stage("checkout scm")
+  {
+    steps{
+    git(url:"https://github.com/minaxijoshi3101/myapp.git") 
+    }
+  }
+  stage("maven build")
+  {
+      steps
+      {
+      sh '''
+      mvn clean package
+      mv target/*.war target/mywebapp.war
+      
+      '''
+      }
+  }
+  stage("deploy to dev environment")
+  {
+  sshagent(['tomcat-new']) {
+   sh '''
+   sch -o StrictHostKeyChecking=no target/mywebapp.war ec2-user@172.31.54.177:/opt/tomcat8/webapps/ 
+   ssh ec2-user@172.31.54.177 /opt/tomcat8/bin/shutdown.sh
+   ssh ec2-user@172.31.54.177 /opt/tomcat8/bin/startup.sh
+   '''
 }
-}
-stage("maven build")
-{
-steps
-{
-sh '''
-mvn clean package
-'''
-}
-}
+  }
 }
 }
