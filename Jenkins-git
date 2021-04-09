@@ -1,0 +1,9 @@
+pipeline{
+agent any
+stages{
+stage("checkout scm")
+{
+git(url:""https://github.com/minaxijoshi3101/myapp.git") 
+}
+}
+}
